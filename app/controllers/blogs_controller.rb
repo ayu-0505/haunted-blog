@@ -2,6 +2,7 @@
 
 class BlogsController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index show]
+
   before_action :set_blog, only: %i[show edit update destroy]
   before_action :ensure_correct_user, only: %i[edit update destroy]
 
@@ -45,12 +46,12 @@ class BlogsController < ApplicationController
 
   private
 
-  def ensure_correct_user
-    raise ActiveRecord::RecordNotFound if current_user&.id != @blog.user_id.to_i
-  end
-
   def set_blog
     @blog = Blog.find(params[:id])
+  end
+
+  def ensure_correct_user
+    raise ActiveRecord::RecordNotFound if current_user&.id != @blog.user_id.to_i
   end
 
   def blog_params
